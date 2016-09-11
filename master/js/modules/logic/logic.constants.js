@@ -3,7 +3,7 @@
 
     angular
             .module('app.logic')
-            .constant('URL_API', "/defenderglass_api/index.php/")
+            .constant('URL_API', "/controlescolar_api/index.php/")
             .constant("TOKEN_PREFIX", "defendertool");
 
 

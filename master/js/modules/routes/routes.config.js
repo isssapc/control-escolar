@@ -41,16 +41,16 @@
                     title: 'Submenu',
                     templateUrl: helper.basepath('submenu.html')
                 })
-                .state('app.usuarios', {
-                    url: '/usuarios',
-                    title: 'Usuarios',
-                    controller: 'UsuariosCtrl as ctrl',
-                    templateUrl: helper.basepath('usuarios.html'),
-                    resolve: {
-                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
-                                return UsuarioSrv.get_usuarios();
-                            }]
-                    }
+                .state('app.escuelas', {
+                    url: '/escuelas',
+                    title: 'Escuelas',
+                    controller: 'EscuelasCtrl as ctrl',
+                    templateUrl: helper.basepath('escuelas.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
                 })
                 .state('app.cotizar', {
                     url: '/cotizar',

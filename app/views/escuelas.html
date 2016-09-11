@@ -1,4 +1,4 @@
-<h3>Usuarios</h3>
+<h3>Escuelas</h3>
 <div class="row">
     <div class="col-lg-12">
 
@@ -8,16 +8,16 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th>Escuela</th>
                                 <th>Nombre</th>
-                                <th>Email</th>
-                                <th>Rol</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="u in ctrl.usuarios">
-                                <td>{{u.nombre}}</td>
-                                <td>{{u.email}}</td>
-                                <td>{{u.id_rol}}</td>
+                            <tr ng-repeat="e in ctrl.escuelas">
+                                <td>{{e.escuela}}</td>
+                                <td>{{e.nombre_escuela}}</td>
+                                
                             </tr>
                         </tbody>
                     </table>

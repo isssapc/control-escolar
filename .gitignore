@@ -1,2 +1,4 @@
 /master/bower_components/
 /master/node_modules/
+/vendor/
+/nbproject/private/
