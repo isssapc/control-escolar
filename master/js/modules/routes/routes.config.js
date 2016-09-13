@@ -52,6 +52,17 @@
 //                            }]
 //                    }
                 })
+                 .state('app.generales', {
+                    url: '/datos_generales',
+                    title: 'Datos Generales',
+                    controller: 'AlumnosCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos_generales.html')
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
                 .state('app.cotizar', {
                     url: '/cotizar',
                     title: 'Cotizar',

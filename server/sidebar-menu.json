@@ -1,72 +1,46 @@
 [
     {
-        "text": "Menu Heading",
-        "heading": "true",
-        "translate": "sidebar.heading.HEADER"
+        "text": "Administración Escolar",
+        "heading": "true"
     },
     {
-        "text": "Cotizar",
+        "text": "Alumnos",
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
             {
-                "text": "Arquitectónico",
-                "sref": "app.cotizar"
-
-            },
-            {
-                "text": "Automotriz",
-                "sref": "#"
+                "text": "Datos Generales",
+                "sref": "app.generales"
 
             }
         ]
     },
     {
-        "text": "Configuración",
+        "text": "Finanzas",
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
             {
-                "text": "Alta Producto",
-                "sref": "app.submenu"
+                "text": "Kardex",
+                "sref": "app.kardex"
 
             },
             {
-                "text": "Gastos Extras",
-                "sref": "app.submenu"
-
-            },
-            {
-                "text": "Parámetros",
-                "sref": "app.submenu"
-
-            },
-            {
-                "text": "Alta Clientes",
-                "sref": "app.submenu"
-
-            },
-            {
-                "text": "Usuarios",
-                "sref": "app.usuarios"
+                "text": "Estados de Cuenta",
+                "sref": "app.edos_cta"
 
             }
         ]
 
     },
     {
-        "text": "Productos",
+        "text": "Bajas",
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
             {
-                "text": "Catálogo",
-                "sref": "app.submenu"
-
-            },
-            {
-                "text": "Nuevo Producto",
-                "sref": "app.submenu"
+                "text": "Generales",
+                "sref": "app.generales_bajas"
 
             }
 
@@ -74,18 +48,13 @@
 
     },
     {
-        "text": "Clientes",
+        "text": "Catálogos",
         "sref": "#",
         "icon": "icon-folder",
         "submenu": [
             {
-                "text": "Nuevo Cliente",
-                "sref": "app.submenu"
-
-            },
-            {
-                "text": "Buscar Cliente",
-                "sref": "app.submenu"
+                "text": "Escuelas",
+                "sref": "app.escuelas"
 
             }
         ]

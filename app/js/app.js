@@ -73,13 +73,19 @@
     'use strict';
 
     angular
+        .module('app.logic',['satellizer']);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.logic',['satellizer']);
+        .module('app.pages', []);
 })();
 (function() {
     'use strict';
@@ -89,12 +95,6 @@
 })();
 
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages', []);
-})();
 (function() {
     'use strict';
 
@@ -381,6 +381,33 @@
     }
 
 })();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .config(logicConfig);
+
+    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
+    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
+
+        //satellizer
+        $authProvider.baseUrl = URL_API;
+        $authProvider.tokenPrefix = TOKEN_PREFIX;
+
+    }
+})();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .constant('URL_API', "/controlescolar_api/index.php/")
+            .constant("TOKEN_PREFIX", "defendertool");
+
+
+})();
+
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -490,126 +517,6 @@
     }
 })();
 
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .config(logicConfig);
-
-    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
-    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
-
-        //satellizer
-        $authProvider.baseUrl = URL_API;
-        $authProvider.tokenPrefix = TOKEN_PREFIX;
-
-    }
-})();
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .constant('URL_API', "/controlescolar_api/index.php/")
-            .constant("TOKEN_PREFIX", "defendertool");
-
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template: 
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded 
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 3000);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
-    }
-
-})();
 /**=========================================================
  * Module: access-login.js
  * Demo for login api
@@ -730,6 +637,99 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.preloader')
+        .directive('preloader', preloader);
+
+    preloader.$inject = ['$animate', '$timeout', '$q'];
+    function preloader ($animate, $timeout, $q) {
+
+        var directive = {
+            restrict: 'EAC',
+            template: 
+              '<div class="preloader-progress">' +
+                  '<div class="preloader-progress-bar" ' +
+                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
+              '</div>'
+            ,
+            link: link
+        };
+        return directive;
+
+        ///////
+
+        function link(scope, el) {
+
+          scope.loadCounter = 0;
+
+          var counter  = 0,
+              timeout;
+
+          // disables scrollbar
+          angular.element('body').css('overflow', 'hidden');
+          // ensure class is present for styling
+          el.addClass('preloader');
+
+          appReady().then(endCounter);
+
+          timeout = $timeout(startCounter);
+
+          ///////
+
+          function startCounter() {
+
+            var remaining = 100 - counter;
+            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
+
+            scope.loadCounter = parseInt(counter, 10);
+
+            timeout = $timeout(startCounter, 20);
+          }
+
+          function endCounter() {
+
+            $timeout.cancel(timeout);
+
+            scope.loadCounter = 100;
+
+            $timeout(function(){
+              // animate preloader hiding
+              $animate.addClass(el, 'preloader-hidden');
+              // retore scrollbar
+              angular.element('body').css('overflow', '');
+            }, 300);
+          }
+
+          function appReady() {
+            var deferred = $q.defer();
+            var viewsLoaded = 0;
+            // if this doesn't sync with the real app ready
+            // a custom event must be used instead
+            var off = scope.$on('$viewContentLoaded', function () {
+              viewsLoaded ++;
+              // we know there are at least two views to be loaded 
+              // before the app is ready (1-index.html 2-app*.html)
+              if ( viewsLoaded === 2) {
+                // with resolve this fires only once
+                $timeout(function(){
+                  deferred.resolve();
+                }, 3000);
+
+                off();
+              }
+
+            });
+
+            return deferred.promise;
+          }
+
+        } //link
+    }
+
+})();
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -862,6 +862,17 @@
                     title: 'Escuelas',
                     controller: 'EscuelasCtrl as ctrl',
                     templateUrl: helper.basepath('escuelas.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                 .state('app.generales', {
+                    url: '/datos_generales',
+                    title: 'Datos Generales',
+                    controller: 'AlumnosCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos_generales.html')
 //                    resolve: {
 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
 //                                return UsuarioSrv.get_usuarios();
@@ -2165,6 +2176,70 @@
         };
 
     }
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .controller('AlumnosCtrl', Controller);
+
+    Controller.$inject = ['$log', 'AlumnosSrv'];
+    function Controller($log, AlumnosSrv) {
+        console.log("Controlador Alumnos");
+        var self = this;
+        self.alumnos = [];
+
+        self.get_alumnos = function () {
+            AlumnosSrv.get_alumnos().then(function (response) {
+                self.alumnos = response.data;
+            });
+        };
+
+
+        self.get_alumnos();
+
+
+
+        //        UsuarioSrv.get_usuarios().then(function (response) {
+//            console.log("usuarios", JSON.stringify(response.data));
+//            self.usuarios = response.data;
+//        });
+
+
+
+
+    }
+})();
+
+/**=========================================================
+ * Module: browser.js
+ * Browser detection
+ =========================================================*/
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .service('AlumnosSrv', Alumnos);
+
+    Alumnos.$inject = ['$http', 'URL_API'];
+    function Alumnos($http, URL_API) {
+        var url = URL_API;
+        return {
+            get_alumnos: function () {
+                return $http.get(url + 'alumnos_generales');
+            }
+        };
+    }
+
 })();
 
 
