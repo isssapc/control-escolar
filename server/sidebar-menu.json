@@ -8,12 +8,55 @@
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
+            
             {
-                "text": "Datos Generales",
-                "sref": "app.generales"
-
+                "text": "Expediente",
+                "sref": "#",
+                "icon": "fa fa-file-o",
+                "submenu": [
+                    {
+                        "text": "Datos Generales",
+                        "sref": "#"
+                    },
+                    {
+                        "text": "Información Personal",
+                        "sref": "#"
+                    },
+                    {
+                        "text": "Estatus Escolar",
+                        "sref": "#"
+                    },
+                    {
+                        "text": "Documentos Personales",
+                        "sref": "#"
+                    },
+                    {
+                        "text": "Cuotas Escolares",
+                        "sref": "#"
+                    }
+                ]
+            },
+            {
+                "text": "Evaluaciones",
+                "sref": "#"
+             },
+            {
+                "text": "Listas, Actas, Relaciones",
+                "sref": "#"
+            },
+            {
+                "text": "Regularizar Materias",
+                "sref": "#"
+             },
+            {
+                "text": "Constancias",
+                "sref": "#"
+            },
+            {
+                "text": "Historial Académico",
+                "sref": "#"
             }
-        ]
+          ]
     },
     {
         "text": "Alumnos de Baja",
