@@ -4,7 +4,7 @@
         "heading": "true"
     },
     {
-        "text": "Alumnos",
+        "text": "Alumnos Activos",
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
@@ -16,7 +16,7 @@
         ]
     },
     {
-        "text": "Finanzas",
+        "text": "Alumnos de Baja",
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
@@ -34,7 +34,7 @@
 
     },
     {
-        "text": "Bajas",
+        "text": "Alumnos Egresados",
         "sref": "#",
         "icon": "fa fa-file-o",
         "submenu": [
@@ -48,7 +48,61 @@
 
     },
     {
+        "text": "Finanzas",
+        "sref": "#",
+        "icon": "icon-folder",
+        "submenu": [
+            {
+                "text": "Escuelas",
+                "sref": "app.escuelas"
+
+            }
+        ]
+
+    },
+    {
         "text": "Catálogos",
+        "sref": "#",
+        "icon": "icon-folder",
+        "submenu": [
+            {
+                "text": "Escuelas",
+                "sref": "app.escuelas"
+
+            }
+        ]
+
+    },
+    {
+        "text": "Información DGETI",
+        "sref": "#",
+        "icon": "icon-folder",
+        "submenu": [
+            {
+                "text": "Escuelas",
+                "sref": "app.escuelas"
+
+            }
+        ]
+
+    },
+    
+    {
+        "text": "Estadísticas",
+        "sref": "#",
+        "icon": "icon-folder",
+        "submenu": [
+            {
+                "text": "Escuelas",
+                "sref": "app.escuelas"
+
+            }
+        ]
+
+    },
+    
+    {
+        "text": "Herramientas",
         "sref": "#",
         "icon": "icon-folder",
         "submenu": [
