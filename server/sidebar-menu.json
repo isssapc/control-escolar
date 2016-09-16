@@ -16,7 +16,7 @@
                 "submenu": [
                     {
                         "text": "Datos Generales",
-                        "sref": "#"
+                        "sref": "app.datos_generales"
                     },
                     {
                         "text": "Información Personal",

@@ -1,0 +1,42 @@
+<h3>Datos_generales</h3>
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Escuela</th>
+                                <th>Curp</th>
+                                <th>Nombre</th>
+                                <th>Número de Control</th>
+                                <th>Sexo</th>
+                                <th>Fecha de Nacimiento</th>
+                                <th>Tipo de Sangre</th>
+                                <th>Enfermedades</th>
+                                <th>Escuela Definitiva</th>
+                                <th>Estatus</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in ctrl.datos_generales">
+                                <td>{{x.escuela}}</td>
+                                <td>{{x.curp}}</td>
+                                <td>{{x.nombre}}</td>
+                                <td>{{x.num_control}}</td>
+                                <td>{{x.sexo}}</td>
+                                <td>{{x.fecha_nac}}</td>
+                                <td>{{x.tipo_sangre}}</td>
+                                <td>{{x.enfermedad}}</td>
+                                <td>{{x.escuela_def}}</td>
+                                <td>{{x.estatus}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

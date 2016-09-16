@@ -73,13 +73,19 @@
     'use strict';
 
     angular
+        .module('app.logic',['satellizer']);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.logic',['satellizer']);
+        .module('app.pages', []);
 })();
 (function() {
     'use strict';
@@ -93,7 +99,9 @@
     'use strict';
 
     angular
-        .module('app.sidebar', []);
+        .module('app.routes', [
+            'app.lazyload'
+        ]);
 })();
 (function() {
     'use strict';
@@ -105,7 +113,7 @@
     'use strict';
 
     angular
-        .module('app.pages', []);
+        .module('app.sidebar', []);
 })();
 (function() {
     'use strict';
@@ -122,14 +130,6 @@
           ]);
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
-})();
 (function() {
     'use strict';
 
@@ -381,6 +381,33 @@
     }
 
 })();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .config(logicConfig);
+
+    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
+    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
+
+        //satellizer
+        $authProvider.baseUrl = URL_API;
+        $authProvider.tokenPrefix = TOKEN_PREFIX;
+
+    }
+})();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .constant('URL_API', "/controlescolar_api/index.php/")
+            .constant("TOKEN_PREFIX", "defendertool");
+
+
+})();
+
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -490,31 +517,124 @@
     }
 })();
 
+/**=========================================================
+ * Module: access-login.js
+ * Demo for login api
+ =========================================================*/
+
 (function () {
     'use strict';
 
     angular
             .module('app.logic')
-            .config(logicConfig);
+            .controller('LoginCtrl', LoginCtrl);
 
-    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
-    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
+    LoginCtrl.$inject = ['$http', '$state', '$auth'];
+    function LoginCtrl($http, $state, $auth) {
+        var vm = this;
 
-        //satellizer
-        $authProvider.baseUrl = URL_API;
-        $authProvider.tokenPrefix = TOKEN_PREFIX;
+        activate();
 
+        ////////////////
+
+        function activate() {
+            // bind here all data from the form
+            vm.account = {};
+            // place the message if something goes wrong
+            vm.authMsg = '';
+
+            vm.login = function () {
+                vm.authMsg = '';
+
+                if (vm.loginForm.$valid) {
+
+
+                    $auth.login(vm.account).then(function (response) {
+                        console.log("response", JSON.stringify(response.data));
+                        $state.go('app.cotizar');
+                    });
+
+//              $http
+//                .post('api/account/login', {email: vm.account.email, password: vm.account.password})
+//                .then(function(response) {
+//                  // assumes if ok, response is an object with some data, if not, a string with error
+//                  // customize according to your api
+//                  if ( !response.account ) {
+//                    vm.authMsg = 'Incorrect credentials.';
+//                  }else{
+//                    $state.go('app.dashboard');
+//                  }
+//                }, function() {
+//                  vm.authMsg = 'Server Request Error';
+//                });
+                }
+                else {
+                    // set as dirty if the user click directly to login so we show the validation messages
+                    /*jshint -W106*/
+                    vm.loginForm.account_email.$dirty = true;
+                    vm.loginForm.account_password.$dirty = true;
+                }
+            };
+        }
     }
 })();
-(function () {
+
+/**=========================================================
+ * Module: access-register.js
+ * Demo for register account api
+ =========================================================*/
+
+(function() {
     'use strict';
 
     angular
-            .module('app.logic')
-            .constant('URL_API', "/controlescolar_api/index.php/")
-            .constant("TOKEN_PREFIX", "defendertool");
+        .module('app.pages')
+        .controller('RegisterFormController', RegisterFormController);
 
+    RegisterFormController.$inject = ['$http', '$state'];
+    function RegisterFormController($http, $state) {
+        var vm = this;
 
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // bind here all data from the form
+          vm.account = {};
+          // place the message if something goes wrong
+          vm.authMsg = '';
+            
+          vm.register = function() {
+            vm.authMsg = '';
+
+            if(vm.registerForm.$valid) {
+
+              $http
+                .post('api/account/register', {email: vm.account.email, password: vm.account.password})
+                .then(function(response) {
+                  // assumes if ok, response is an object with some data, if not, a string with error
+                  // customize according to your api
+                  if ( !response.account ) {
+                    vm.authMsg = response;
+                  }else{
+                    $state.go('app.dashboard');
+                  }
+                }, function() {
+                  vm.authMsg = 'Server Request Error';
+                });
+            }
+            else {
+              // set as dirty if the user click directly to login so we show the validation messages
+              /*jshint -W106*/
+              vm.registerForm.account_email.$dirty = true;
+              vm.registerForm.account_password.$dirty = true;
+              vm.registerForm.account_agreed.$dirty = true;
+              
+            }
+          };
+        }
+    }
 })();
 
 (function() {
@@ -610,6 +730,281 @@
     }
 
 })();
+/**=========================================================
+ * Module: helpers.js
+ * Provides helper functions for routes definition
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.routes')
+        .provider('RouteHelpers', RouteHelpersProvider)
+        ;
+
+    RouteHelpersProvider.$inject = ['APP_REQUIRES'];
+    function RouteHelpersProvider(APP_REQUIRES) {
+
+      /* jshint validthis:true */
+      return {
+        // provider access level
+        basepath: basepath,
+        resolveFor: resolveFor,
+        // controller access level
+        $get: function() {
+          return {
+            basepath: basepath,
+            resolveFor: resolveFor
+          };
+        }
+      };
+
+      // Set here the base of the relative path
+      // for all app views
+      function basepath(uri) {
+        return 'app/views/' + uri;
+      }
+
+      // Generates a resolve object by passing script names
+      // previously configured in constant.APP_REQUIRES
+      function resolveFor() {
+        var _args = arguments;
+        return {
+          deps: ['$ocLazyLoad','$q', function ($ocLL, $q) {
+            // Creates a promise chain for each argument
+            var promise = $q.when(1); // empty promise
+            for(var i=0, len=_args.length; i < len; i ++){
+              promise = andThen(_args[i]);
+            }
+            return promise;
+
+            // creates promise to chain dynamically
+            function andThen(_arg) {
+              // also support a function that returns a promise
+              if(typeof _arg === 'function')
+                  return promise.then(_arg);
+              else
+                  return promise.then(function() {
+                    // if is a module, pass the name. If not, pass the array
+                    var whatToLoad = getRequired(_arg);
+                    // simple error check
+                    if(!whatToLoad) return $.error('Route resolve: Bad resource name [' + _arg + ']');
+                    // finally, return a promise
+                    return $ocLL.load( whatToLoad );
+                  });
+            }
+            // check and returns required data
+            // analyze module items with the form [name: '', files: []]
+            // and also simple array of script files (for not angular js)
+            function getRequired(name) {
+              if (APP_REQUIRES.modules)
+                  for(var m in APP_REQUIRES.modules)
+                      if(APP_REQUIRES.modules[m].name && APP_REQUIRES.modules[m].name === name)
+                          return APP_REQUIRES.modules[m];
+              return APP_REQUIRES.scripts && APP_REQUIRES.scripts[name];
+            }
+
+          }]};
+      } // resolveFor
+
+    }
+
+
+})();
+
+
+/**=========================================================
+ * Module: config.js
+ * App routes and resources configuration
+ =========================================================*/
+
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.routes')
+            .config(routesConfig);
+
+    routesConfig.$inject = ['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteHelpersProvider'];
+    function routesConfig($stateProvider, $locationProvider, $urlRouterProvider, helper) {
+
+        // Set the following to true to enable the HTML5 Mode
+        // You may have to set <base> tag in index and a routing configuration in your server
+        $locationProvider.html5Mode(false);
+
+        // defaults to dashboard
+        $urlRouterProvider.otherwise('/app/cotizar');
+
+        // 
+        // Application Routes
+        // -----------------------------------   
+        $stateProvider
+                .state('app', {
+                    url: '/app',
+                    abstract: true,
+                    templateUrl: helper.basepath('app.html'),
+                    resolve: helper.resolveFor('modernizr', 'icons')
+                })
+                .state('app.singleview', {
+                    url: '/singleview',
+                    title: 'Single View',
+                    templateUrl: helper.basepath('singleview.html')
+                })
+                .state('app.submenu', {
+                    url: '/submenu',
+                    title: 'Submenu',
+                    templateUrl: helper.basepath('submenu.html')
+                })
+                .state('app.escuelas', {
+                    url: '/escuelas',
+                    title: 'Escuelas',
+                    controller: 'EscuelasCtrl as ctrl',
+                    templateUrl: helper.basepath('escuelas.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                 .state('app.generales', {
+                    url: '/datos_generales',
+                    title: 'Datos Generales',
+                    controller: 'AlumnosCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos_generales.html')
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                 .state('app.datos_generales', {
+                    url: '/datos_generales',
+                    title: 'Datos Generales',
+                    controller: 'Datos_GeneralesCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos_generales.html')
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                .state('app.cotizar', {
+                    url: '/cotizar',
+                    title: 'Cotizar',
+                    controller: 'CotizarCtrl as ctrl',
+                    templateUrl: helper.basepath('cotizar.html')
+                })
+                .state('page', {
+                    url: '/page',
+                    templateUrl: 'app/pages/page.html',
+                    resolve: helper.resolveFor('modernizr', 'icons'),
+                    controller: ['$rootScope', function ($rootScope) {
+                            $rootScope.app.layout.isBoxed = false;
+                        }]
+                })
+                .state('page.login', {
+                    url: '/login',
+                    title: 'Login',
+                    templateUrl: 'app/pages/login.html'
+                })
+                // 
+                // CUSTOM RESOLVES
+                //   Add your own resolves properties
+                //   following this object extend
+                //   method
+                // ----------------------------------- 
+                // .state('app.someroute', {
+                //   url: '/some_url',
+                //   templateUrl: 'path_to_template.html',
+                //   controller: 'someController',
+                //   resolve: angular.extend(
+                //     helper.resolveFor(), {
+                //     // YOUR RESOLVES GO HERE
+                //     }
+                //   )
+                // })
+                ;
+
+    } // routesConfig
+
+})();
+
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.settings')
+        .run(settingsRun);
+
+    settingsRun.$inject = ['$rootScope', '$localStorage'];
+
+    function settingsRun($rootScope, $localStorage){
+
+
+      // User Settings
+      // -----------------------------------
+      $rootScope.user = {
+        name:     'John',
+        job:      'ng-developer',
+        picture:  'app/img/user/02.jpg'
+      };
+
+      // Hides/show user avatar on sidebar from any element
+      $rootScope.toggleUserBlock = function(){
+        $rootScope.$broadcast('toggleUserBlock');
+      };
+
+      // Global Settings
+      // -----------------------------------
+      $rootScope.app = {
+        name: 'Defender Glass',
+        description: 'Cotizador',
+        year: ((new Date()).getFullYear()),
+        layout: {
+          isFixed: true,
+          isCollapsed: false,
+          isBoxed: false,
+          isRTL: false,
+          horizontal: false,
+          isFloat: false,
+          asideHover: false,
+          theme: null,
+          asideScrollbar: false,
+          isCollapsedText: false
+        },
+        useFullLayout: false,
+        hiddenFooter: false,
+        offsidebarOpen: false,
+        asideToggled: false,
+        viewAnimation: 'ng-fadeInUp'
+      };
+
+      // Setup the layout mode
+      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
+
+      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
+      // if( angular.isDefined($localStorage.layout) )
+      //   $rootScope.app.layout = $localStorage.layout;
+      // else
+      //   $localStorage.layout = $rootScope.app.layout;
+      //
+      // $rootScope.$watch('app.layout', function () {
+      //   $localStorage.layout = $rootScope.app.layout;
+      // }, true);
+
+      // Close submenu when sidebar change from collapsed to normal
+      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
+        if( newValue === false )
+          $rootScope.$broadcast('closeSidebarMenu');
+      });
+
+    }
+
+})();
+
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
@@ -967,199 +1362,6 @@
           });
 
           $scope.$on('$destroy', detach);
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-
-      // User Settings
-      // -----------------------------------
-      $rootScope.user = {
-        name:     'John',
-        job:      'ng-developer',
-        picture:  'app/img/user/02.jpg'
-      };
-
-      // Hides/show user avatar on sidebar from any element
-      $rootScope.toggleUserBlock = function(){
-        $rootScope.$broadcast('toggleUserBlock');
-      };
-
-      // Global Settings
-      // -----------------------------------
-      $rootScope.app = {
-        name: 'Defender Glass',
-        description: 'Cotizador',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null,
-          asideScrollbar: false,
-          isCollapsedText: false
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp'
-      };
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings [*** UNCOMMENT TO ENABLE ***]
-      // if( angular.isDefined($localStorage.layout) )
-      //   $rootScope.app.layout = $localStorage.layout;
-      // else
-      //   $localStorage.layout = $rootScope.app.layout;
-      //
-      // $rootScope.$watch('app.layout', function () {
-      //   $localStorage.layout = $rootScope.app.layout;
-      // }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
-
-/**=========================================================
- * Module: access-login.js
- * Demo for login api
- =========================================================*/
-
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .controller('LoginCtrl', LoginCtrl);
-
-    LoginCtrl.$inject = ['$http', '$state', '$auth'];
-    function LoginCtrl($http, $state, $auth) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-            // bind here all data from the form
-            vm.account = {};
-            // place the message if something goes wrong
-            vm.authMsg = '';
-
-            vm.login = function () {
-                vm.authMsg = '';
-
-                if (vm.loginForm.$valid) {
-
-
-                    $auth.login(vm.account).then(function (response) {
-                        console.log("response", JSON.stringify(response.data));
-                        $state.go('app.cotizar');
-                    });
-
-//              $http
-//                .post('api/account/login', {email: vm.account.email, password: vm.account.password})
-//                .then(function(response) {
-//                  // assumes if ok, response is an object with some data, if not, a string with error
-//                  // customize according to your api
-//                  if ( !response.account ) {
-//                    vm.authMsg = 'Incorrect credentials.';
-//                  }else{
-//                    $state.go('app.dashboard');
-//                  }
-//                }, function() {
-//                  vm.authMsg = 'Server Request Error';
-//                });
-                }
-                else {
-                    // set as dirty if the user click directly to login so we show the validation messages
-                    /*jshint -W106*/
-                    vm.loginForm.account_email.$dirty = true;
-                    vm.loginForm.account_password.$dirty = true;
-                }
-            };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: access-register.js
- * Demo for register account api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages')
-        .controller('RegisterFormController', RegisterFormController);
-
-    RegisterFormController.$inject = ['$http', '$state'];
-    function RegisterFormController($http, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // bind here all data from the form
-          vm.account = {};
-          // place the message if something goes wrong
-          vm.authMsg = '';
-            
-          vm.register = function() {
-            vm.authMsg = '';
-
-            if(vm.registerForm.$valid) {
-
-              $http
-                .post('api/account/register', {email: vm.account.email, password: vm.account.password})
-                .then(function(response) {
-                  // assumes if ok, response is an object with some data, if not, a string with error
-                  // customize according to your api
-                  if ( !response.account ) {
-                    vm.authMsg = response;
-                  }else{
-                    $state.go('app.dashboard');
-                  }
-                }, function() {
-                  vm.authMsg = 'Server Request Error';
-                });
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.registerForm.account_email.$dirty = true;
-              vm.registerForm.account_password.$dirty = true;
-              vm.registerForm.account_agreed.$dirty = true;
-              
-            }
-          };
         }
     }
 })();
@@ -1657,197 +1859,6 @@
         };
     }
 })();
-
-/**=========================================================
- * Module: helpers.js
- * Provides helper functions for routes definition
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes')
-        .provider('RouteHelpers', RouteHelpersProvider)
-        ;
-
-    RouteHelpersProvider.$inject = ['APP_REQUIRES'];
-    function RouteHelpersProvider(APP_REQUIRES) {
-
-      /* jshint validthis:true */
-      return {
-        // provider access level
-        basepath: basepath,
-        resolveFor: resolveFor,
-        // controller access level
-        $get: function() {
-          return {
-            basepath: basepath,
-            resolveFor: resolveFor
-          };
-        }
-      };
-
-      // Set here the base of the relative path
-      // for all app views
-      function basepath(uri) {
-        return 'app/views/' + uri;
-      }
-
-      // Generates a resolve object by passing script names
-      // previously configured in constant.APP_REQUIRES
-      function resolveFor() {
-        var _args = arguments;
-        return {
-          deps: ['$ocLazyLoad','$q', function ($ocLL, $q) {
-            // Creates a promise chain for each argument
-            var promise = $q.when(1); // empty promise
-            for(var i=0, len=_args.length; i < len; i ++){
-              promise = andThen(_args[i]);
-            }
-            return promise;
-
-            // creates promise to chain dynamically
-            function andThen(_arg) {
-              // also support a function that returns a promise
-              if(typeof _arg === 'function')
-                  return promise.then(_arg);
-              else
-                  return promise.then(function() {
-                    // if is a module, pass the name. If not, pass the array
-                    var whatToLoad = getRequired(_arg);
-                    // simple error check
-                    if(!whatToLoad) return $.error('Route resolve: Bad resource name [' + _arg + ']');
-                    // finally, return a promise
-                    return $ocLL.load( whatToLoad );
-                  });
-            }
-            // check and returns required data
-            // analyze module items with the form [name: '', files: []]
-            // and also simple array of script files (for not angular js)
-            function getRequired(name) {
-              if (APP_REQUIRES.modules)
-                  for(var m in APP_REQUIRES.modules)
-                      if(APP_REQUIRES.modules[m].name && APP_REQUIRES.modules[m].name === name)
-                          return APP_REQUIRES.modules[m];
-              return APP_REQUIRES.scripts && APP_REQUIRES.scripts[name];
-            }
-
-          }]};
-      } // resolveFor
-
-    }
-
-
-})();
-
-
-/**=========================================================
- * Module: config.js
- * App routes and resources configuration
- =========================================================*/
-
-
-(function () {
-    'use strict';
-
-    angular
-            .module('app.routes')
-            .config(routesConfig);
-
-    routesConfig.$inject = ['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteHelpersProvider'];
-    function routesConfig($stateProvider, $locationProvider, $urlRouterProvider, helper) {
-
-        // Set the following to true to enable the HTML5 Mode
-        // You may have to set <base> tag in index and a routing configuration in your server
-        $locationProvider.html5Mode(false);
-
-        // defaults to dashboard
-        $urlRouterProvider.otherwise('/app/cotizar');
-
-        // 
-        // Application Routes
-        // -----------------------------------   
-        $stateProvider
-                .state('app', {
-                    url: '/app',
-                    abstract: true,
-                    templateUrl: helper.basepath('app.html'),
-                    resolve: helper.resolveFor('modernizr', 'icons')
-                })
-                .state('app.singleview', {
-                    url: '/singleview',
-                    title: 'Single View',
-                    templateUrl: helper.basepath('singleview.html')
-                })
-                .state('app.submenu', {
-                    url: '/submenu',
-                    title: 'Submenu',
-                    templateUrl: helper.basepath('submenu.html')
-                })
-                .state('app.escuelas', {
-                    url: '/escuelas',
-                    title: 'Escuelas',
-                    controller: 'EscuelasCtrl as ctrl',
-                    templateUrl: helper.basepath('escuelas.html'),
-//                    resolve: {
-//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
-//                                return UsuarioSrv.get_usuarios();
-//                            }]
-//                    }
-                })
-                 .state('app.generales', {
-                    url: '/datos_generales',
-                    title: 'Datos Generales',
-                    controller: 'AlumnosCtrl as ctrl',
-                    templateUrl: helper.basepath('alumnos_generales.html')
-//                    resolve: {
-//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
-//                                return UsuarioSrv.get_usuarios();
-//                            }]
-//                    }
-                })
-                .state('app.cotizar', {
-                    url: '/cotizar',
-                    title: 'Cotizar',
-                    controller: 'CotizarCtrl as ctrl',
-                    templateUrl: helper.basepath('cotizar.html')
-                })
-                .state('page', {
-                    url: '/page',
-                    templateUrl: 'app/pages/page.html',
-                    resolve: helper.resolveFor('modernizr', 'icons'),
-                    controller: ['$rootScope', function ($rootScope) {
-                            $rootScope.app.layout.isBoxed = false;
-                        }]
-                })
-                .state('page.login', {
-                    url: '/login',
-                    title: 'Login',
-                    templateUrl: 'app/pages/login.html'
-                })
-                // 
-                // CUSTOM RESOLVES
-                //   Add your own resolves properties
-                //   following this object extend
-                //   method
-                // ----------------------------------- 
-                // .state('app.someroute', {
-                //   url: '/some_url',
-                //   templateUrl: 'path_to_template.html',
-                //   controller: 'someController',
-                //   resolve: angular.extend(
-                //     helper.resolveFor(), {
-                //     // YOUR RESOLVES GO HERE
-                //     }
-                //   )
-                // })
-                ;
-
-    } // routesConfig
-
-})();
-
 
 
 // To run this code, edit file index.html or index.jade and change
@@ -2355,6 +2366,70 @@
         return {
             get_usuarios: function () {
                 return $http.get(url + 'usuarios');
+            }
+        };
+    }
+
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .controller('DatosGeneralesCtrl', Controller);
+
+    Controller.$inject = ['$log', 'DatosGeneralesSrv'];
+    function Controller($log, DatosGeneralesSrv) {
+        console.log("Controlador Alumnos");
+        var self = this;
+        self.datos_generales = [];
+
+        self.get_datos_generales = function () {
+            DatosGeneralesSrv.get_datos_generales().then(function (response) {
+                self.dagtos_generales = response.data;
+            });
+        };
+
+
+        self.get_datos_generales();
+
+
+
+        //        UsuarioSrv.get_usuarios().then(function (response) {
+//            console.log("usuarios", JSON.stringify(response.data));
+//            self.usuarios = response.data;
+//        });
+
+
+
+
+    }
+})();
+
+/**=========================================================
+ * Module: browser.js
+ * Browser detection
+ =========================================================*/
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .service('DatosGeneralesSrv', DatosGenerales);
+
+    Alumnos.$inject = ['$http', 'URL_API'];
+    function Alumnos($http, URL_API) {
+        var url = URL_API;
+        return {
+            get_datos_generales: function () {
+                return $http.get(url + 'datos_generales');
             }
         };
     }
