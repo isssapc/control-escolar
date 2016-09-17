@@ -73,13 +73,13 @@
     'use strict';
 
     angular
-        .module('app.navsearch', []);
+        .module('app.logic',['satellizer']);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.logic',['satellizer']);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -381,6 +381,33 @@
     }
 
 })();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .config(logicConfig);
+
+    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
+    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
+
+        //satellizer
+        $authProvider.baseUrl = URL_API;
+        $authProvider.tokenPrefix = TOKEN_PREFIX;
+
+    }
+})();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .constant('URL_API', "/controlescolar_api/index.php/")
+            .constant("TOKEN_PREFIX", "defendertool");
+
+
+})();
+
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -488,33 +515,6 @@
             ;
         }
     }
-})();
-
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .config(logicConfig);
-
-    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
-    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
-
-        //satellizer
-        $authProvider.baseUrl = URL_API;
-        $authProvider.tokenPrefix = TOKEN_PREFIX;
-
-    }
-})();
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .constant('URL_API', "/controlescolar_api/index.php/")
-            .constant("TOKEN_PREFIX", "defendertool");
-
-
 })();
 
 /**=========================================================
@@ -2296,6 +2296,7 @@
         console.log("Controlador Escuelas");
         var self = this;
         self.escuelas = [];
+        self.escuela = {};
 
         self.get_escuelas = function () {
             EscuelaSrv.get_escuelas().then(function (response) {
@@ -2307,12 +2308,11 @@
         self.get_escuelas();
 
 
+        self.seleccionar_escuela = function (e) {
+            self.escuela = e;
+        };
 
 
-        //        UsuarioSrv.get_usuarios().then(function (response) {
-//            console.log("usuarios", JSON.stringify(response.data));
-//            self.usuarios = response.data;
-//        });
 
 
 

@@ -15,6 +15,7 @@
         console.log("Controlador Escuelas");
         var self = this;
         self.escuelas = [];
+        self.escuela = {};
 
         self.get_escuelas = function () {
             EscuelaSrv.get_escuelas().then(function (response) {
@@ -26,12 +27,11 @@
         self.get_escuelas();
 
 
+        self.seleccionar_escuela = function (e) {
+            self.escuela = e;
+        };
 
 
-        //        UsuarioSrv.get_usuarios().then(function (response) {
-//            console.log("usuarios", JSON.stringify(response.data));
-//            self.usuarios = response.data;
-//        });
 
 
 

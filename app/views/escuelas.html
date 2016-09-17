@@ -1,7 +1,6 @@
 <h3>Escuelas</h3>
 <div class="row">
-    <div class="col-lg-12">
-
+    <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="table-responsive">
@@ -10,17 +9,85 @@
                             <tr>
                                 <th>Escuela</th>
                                 <th>Nombre</th>
-                                
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="e in ctrl.escuelas">
                                 <td>{{e.escuela}}</td>
                                 <td>{{e.nombre_escuela}}</td>
-                                
+                                <td><button class="btn btn-sm btn-default" ng-click="ctrl.seleccionar_escuela(e)"><span class="fa fa-check"></span></button></td>                                
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Datos</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Escuela</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.escuela">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Nombre</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.nombre_escuela">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Domicilio</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.domicilio">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Clave</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.clave">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Tipo Periodo</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.tipo_periodo">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Número Período</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.numero_periodo">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Director</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.director">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-2">Control Escolar</label>
+                        <div class="col-lg-10">
+                            <input class="form-control" ng-model="ctrl.escuela.control_escolar">
+                        </div>
+                    </div>                   
+
+
                 </div>
             </div>
         </div>
