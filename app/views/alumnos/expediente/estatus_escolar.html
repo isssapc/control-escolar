@@ -1,0 +1,61 @@
+<h3>Estatus Escolar</h3>
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Escuela</th>
+                                <th>Curp</th>
+                                <th>Revalidación</th>
+                                <th>Ciudad</th>
+                                <th>Fecha Revalidación</th>
+                                <th>Procedencia</th>
+                                <th>Fecha de Ingreso</th>
+                                <th>Carrera</th>
+                                <th>Turno</th>
+                                <th>Semestre</th>
+                                <th>Grupo</th>
+                                <th>Regular</th>
+                                <th>Semestre Ingreso</th>
+                                <th>Periodo Ingreso</th>
+                                <th>Ingreso Subsistema</th>
+                                <th>Periodo Egreso</th>
+                                <th>Promedio</th>
+                                <th>Folio Generación</th>
+                                <th>Semestre Baja</th>
+                                <th>Fecha Baja</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in ctrl.estatus_escolar">
+                                <td>{{x.escuela}}</td>
+                                <td>{{x.curp}}</td>
+                                <td>{{x.revalidacion}}</td>
+                                <td>{{x.fecha_rev}}</td>
+                                <td>{{x.procedencia}}</td>
+                                <td>{{x.fecha_ingreso}}</td>
+                                <td>{{x.carrera}}</td>
+                                <td>{{x.turno}}</td>
+                                <td>{{x.semestre}}</td>
+                                <td>{{x.grupo}}</td>
+                                <td>{{x.regular}}</td>
+                                <td>{{x.semestre_ingreso}}</td>
+                                <td>{{x.periodo_ingreso}}</td>
+                                <td>{{x.ingreso_subsistema}}</td>
+                                <td>{{x.periodo_egreso}}</td>
+                                <td>{{x.promedio}}</td>
+                                <td>{{x.folio_generacion}}</td>
+                                <td>{{x.semestre_baja}}</td>
+                                <td>{{x.fecha_baja}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

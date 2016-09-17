@@ -1,0 +1,42 @@
+<h3>Datos personales</h3>
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Curp</th>
+                                <th>Domicilio</th>
+                                <th>Colonia</th>
+                                <th>Ciudad</th>
+                                <th>Tutor</th>
+                                <th>Trabajo del Tutor</th>
+                                <th>Celular del Tutor</th>
+                                <th>Teléfono Trabajo</th>
+                                <th>Teléfono Casa</th>
+                                <th>Correo Tutor</th>
+                             </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in ctrl.datos_personales">
+                                <td>{{x.curp}}</td>
+                                <td>{{x.domicilio}}</td>
+                                <td>{{x.colonia}}</td>
+                                <td>{{x.ciudad}}</td>
+                                <td>{{x.tutor}}</td>
+                                <td>{{x.trabajo_tutor}}</td>
+                                <td>{{x.celular_tutor}}</td>
+                                <td>{{x.telefono_trabajo}}</td>
+                                <td>{{x.telefono_casa}}</td>
+                                <td>{{x.correo_tutor}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

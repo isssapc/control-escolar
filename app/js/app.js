@@ -36,6 +36,12 @@
     'use strict';
 
     angular
+        .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -55,12 +61,6 @@
     'use strict';
 
     angular
-        .module('app.colors', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.lazyload', []);
 })();
 (function() {
@@ -73,13 +73,13 @@
     'use strict';
 
     angular
-        .module('app.logic',['satellizer']);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.navsearch', []);
+        .module('app.logic',['satellizer']);
 })();
 (function() {
     'use strict';
@@ -128,6 +128,56 @@
         .module('app.utils', [
           'app.colors'
           ]);
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
 })();
 
 (function() {
@@ -251,56 +301,6 @@
     'use strict';
 
     angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.lazyload')
         .config(lazyloadConfig);
 
@@ -381,33 +381,6 @@
     }
 
 })();
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .config(logicConfig);
-
-    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
-    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
-
-        //satellizer
-        $authProvider.baseUrl = URL_API;
-        $authProvider.tokenPrefix = TOKEN_PREFIX;
-
-    }
-})();
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .constant('URL_API', "/controlescolar_api/index.php/")
-            .constant("TOKEN_PREFIX", "defendertool");
-
-
-})();
-
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -515,6 +488,33 @@
             ;
         }
     }
+})();
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .config(logicConfig);
+
+    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
+    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
+
+        //satellizer
+        $authProvider.baseUrl = URL_API;
+        $authProvider.tokenPrefix = TOKEN_PREFIX;
+
+    }
+})();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .constant('URL_API', "/controlescolar_api/index.php/")
+            .constant("TOKEN_PREFIX", "defendertool");
+
+
 })();
 
 /**=========================================================
@@ -835,7 +835,7 @@
         $locationProvider.html5Mode(false);
 
         // defaults to dashboard
-        $urlRouterProvider.otherwise('/app/cotizar');
+        $urlRouterProvider.otherwise('/app/escuelas');
 
         // 
         // Application Routes
@@ -868,22 +868,44 @@
 //                            }]
 //                    }
                 })
-                 .state('app.generales', {
+                /*                 .state('app.generales', {
+                 url: '/datos_generales',
+                 title: 'Datos Generales',
+                 controller: 'AlumnosCtrl as ctrl',
+                 templateUrl: helper.basepath('alumnos_generales.html')
+                 //                    resolve: {
+                 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+                 //                                return UsuarioSrv.get_usuarios();
+                 //                            }]
+                 //                    }
+                 })*/
+                .state('app.datos_generales', {
                     url: '/datos_generales',
                     title: 'Datos Generales',
-                    controller: 'AlumnosCtrl as ctrl',
-                    templateUrl: helper.basepath('alumnos_generales.html')
+                    controller: 'DatosGeneralesCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos/expediente/datos_generales.html')
 //                    resolve: {
 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
 //                                return UsuarioSrv.get_usuarios();
 //                            }]
 //                    }
                 })
-                 .state('app.datos_generales', {
-                    url: '/datos_generales',
-                    title: 'Datos Generales',
-                    controller: 'Datos_GeneralesCtrl as ctrl',
-                    templateUrl: helper.basepath('alumnos_generales.html')
+                .state('app.datos_personales', {
+                    url: '/datos_personales',
+                    title: 'Datos Personales',
+                    controller: 'DatosPersonalesCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos/expediente/datos_personales.html')
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                .state('app.estatus_escolar', {
+                    url: '/estatus_escolar',
+                    title: 'Estatus Escolar',
+                    controller: 'EstatusEscolarCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos/expediente/estatus_escolar.html')
 //                    resolve: {
 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
 //                                return UsuarioSrv.get_usuarios();
@@ -2236,17 +2258,21 @@
 
 (function () {
     'use strict';
-
     angular
             .module('app.logic')
             .service('AlumnosSrv', Alumnos);
-
     Alumnos.$inject = ['$http', 'URL_API'];
     function Alumnos($http, URL_API) {
         var url = URL_API;
         return {
-            get_alumnos: function () {
+            get_datos_generales: function () {
                 return $http.get(url + 'alumnos_generales');
+            },
+            get_datos_personales: function () {
+                return $http.get(url + 'alumnos_personales');
+            },
+            get_estatus_escolar: function () {
+                return $http.get(url + 'alumnos/estatus_escolar');
             }
         };
     }
@@ -2384,15 +2410,15 @@
             .module('app.logic')
             .controller('DatosGeneralesCtrl', Controller);
 
-    Controller.$inject = ['$log', 'DatosGeneralesSrv'];
-    function Controller($log, DatosGeneralesSrv) {
+    Controller.$inject = ['$log', 'AlumnosSrv'];
+    function Controller($log, AlumnosSrv) {
         console.log("Controlador Alumnos");
         var self = this;
         self.datos_generales = [];
 
         self.get_datos_generales = function () {
-            DatosGeneralesSrv.get_datos_generales().then(function (response) {
-                self.dagtos_generales = response.data;
+            AlumnosSrv.get_datos_generales().then(function (response) {
+                self.datos_generales = response.data;
             });
         };
 
@@ -2412,26 +2438,82 @@
     }
 })();
 
-/**=========================================================
- * Module: browser.js
- * Browser detection
- =========================================================*/
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
 
 (function () {
     'use strict';
 
     angular
             .module('app.logic')
-            .service('DatosGeneralesSrv', DatosGenerales);
+            .controller('DatosPersonalesCtrl', Controller);
 
-    Alumnos.$inject = ['$http', 'URL_API'];
-    function Alumnos($http, URL_API) {
-        var url = URL_API;
-        return {
-            get_datos_generales: function () {
-                return $http.get(url + 'datos_generales');
-            }
+    Controller.$inject = ['$log', 'AlumnosSrv'];
+    function Controller($log, AlumnosSrv) {
+        console.log("Controlador Datos Personales");
+        var self = this;
+        self.datos_personales = [];
+
+        self.get_datos_personales = function () {
+            AlumnosSrv.get_datos_personales().then(function (response) {
+                self.datos_personales = response.data;
+            });
         };
-    }
 
+
+        self.get_datos_personales();
+
+
+
+        //        UsuarioSrv.get_usuarios().then(function (response) {
+//            console.log("usuarios", JSON.stringify(response.data));
+//            self.usuarios = response.data;
+//        });
+
+
+
+
+    }
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .controller('EstatusEscolarCtrl', Controller);
+
+    Controller.$inject = ['$log', 'AlumnosSrv'];
+    function Controller($log, AlumnosSrv) {
+        console.log("Controlador Estatus Escolar");
+        var self = this;
+        self.estatus_escolar = [];
+
+        self.get_estatus_escolar = function () {
+            AlumnosSrv.get_estatus_escolar().then(function (response) {
+                self.estatus_escolar = response.data;
+            });
+        };
+
+
+        self.get_estatus_escolar();
+
+
+
+        //        UsuarioSrv.get_usuarios().then(function (response) {
+//            console.log("usuarios", JSON.stringify(response.data));
+//            self.usuarios = response.data;
+//        });
+
+
+
+
+    }
 })();

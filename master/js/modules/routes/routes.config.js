@@ -19,7 +19,7 @@
         $locationProvider.html5Mode(false);
 
         // defaults to dashboard
-        $urlRouterProvider.otherwise('/app/cotizar');
+        $urlRouterProvider.otherwise('/app/escuelas');
 
         // 
         // Application Routes
@@ -52,22 +52,44 @@
 //                            }]
 //                    }
                 })
-                 .state('app.generales', {
+                /*                 .state('app.generales', {
+                 url: '/datos_generales',
+                 title: 'Datos Generales',
+                 controller: 'AlumnosCtrl as ctrl',
+                 templateUrl: helper.basepath('alumnos_generales.html')
+                 //                    resolve: {
+                 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+                 //                                return UsuarioSrv.get_usuarios();
+                 //                            }]
+                 //                    }
+                 })*/
+                .state('app.datos_generales', {
                     url: '/datos_generales',
                     title: 'Datos Generales',
-                    controller: 'AlumnosCtrl as ctrl',
-                    templateUrl: helper.basepath('alumnos_generales.html')
+                    controller: 'DatosGeneralesCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos/expediente/datos_generales.html')
 //                    resolve: {
 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
 //                                return UsuarioSrv.get_usuarios();
 //                            }]
 //                    }
                 })
-                 .state('app.datos_generales', {
-                    url: '/datos_generales',
-                    title: 'Datos Generales',
-                    controller: 'Datos_GeneralesCtrl as ctrl',
-                    templateUrl: helper.basepath('alumnos_generales.html')
+                .state('app.datos_personales', {
+                    url: '/datos_personales',
+                    title: 'Datos Personales',
+                    controller: 'DatosPersonalesCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos/expediente/datos_personales.html')
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                .state('app.estatus_escolar', {
+                    url: '/estatus_escolar',
+                    title: 'Estatus Escolar',
+                    controller: 'EstatusEscolarCtrl as ctrl',
+                    templateUrl: helper.basepath('alumnos/expediente/estatus_escolar.html')
 //                    resolve: {
 //                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
 //                                return UsuarioSrv.get_usuarios();

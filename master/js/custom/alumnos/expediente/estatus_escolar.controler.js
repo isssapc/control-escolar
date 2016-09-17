@@ -8,22 +8,22 @@
 
     angular
             .module('app.logic')
-            .controller('DatosGeneralesCtrl', Controller);
+            .controller('EstatusEscolarCtrl', Controller);
 
     Controller.$inject = ['$log', 'AlumnosSrv'];
     function Controller($log, AlumnosSrv) {
-        console.log("Controlador Alumnos");
+        console.log("Controlador Estatus Escolar");
         var self = this;
-        self.datos_generales = [];
+        self.estatus_escolar = [];
 
-        self.get_datos_generales = function () {
-            AlumnosSrv.get_datos_generales().then(function (response) {
-                self.datos_generales = response.data;
+        self.get_estatus_escolar = function () {
+            AlumnosSrv.get_estatus_escolar().then(function (response) {
+                self.estatus_escolar = response.data;
             });
         };
 
 
-        self.get_datos_generales();
+        self.get_estatus_escolar();
 
 
 

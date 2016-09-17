@@ -20,11 +20,11 @@
                     },
                     {
                         "text": "Información Personal",
-                        "sref": "#"
+                        "sref": "app.datos_personales"
                     },
                     {
                         "text": "Estatus Escolar",
-                        "sref": "#"
+                        "sref": "app.estatus_escolar"
                     },
                     {
                         "text": "Documentos Personales",
