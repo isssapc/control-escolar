@@ -1718,6 +1718,8 @@
             // Make sure to affect only the correct checkbox column
             table.find('tbody > tr > td:nth-child('+index+') input[type="checkbox"]')
               .prop('checked', checkbox[0].checked);
+              scope.$apply();
+              console.log("directiva check all");
 
           });
         }
