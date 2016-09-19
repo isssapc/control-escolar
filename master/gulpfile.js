@@ -1,5 +1,5 @@
-var args = require('yargs').argv,
-        path = require('path'),
+//var args = require('yargs').argv,
+  var      path = require('path'),
         gulp = require('gulp'),
         $ = require('gulp-load-plugins')(),
         gulpsync = $.sync(gulp),
@@ -20,12 +20,12 @@ var useSourceMaps = false;
 // Switch to sass mode.
 // Example:
 //    gulp --usesass
-var useSass = args.usesass;
+//var useSass = args.usesass;
 
 // Angular template cache
 // Example:
 //    gulp --usecache
-var useCache = args.usecache;
+var useCache =true; //args.usecache;
 
 // ignore everything that begins with underscore
 var hidden_files = '**/_*.*';
