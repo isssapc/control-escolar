@@ -16,7 +16,7 @@
                             <tr ng-repeat="e in ctrl.escuelas">
                                 <td>{{e.escuela}}</td>
                                 <td>{{e.nombre_escuela}}</td>
-                                <td><button class="btn btn-sm btn-default" ng-click="ctrl.seleccionar_escuela(e)"><span class="fa fa-check"></span></button></td>                                
+                                <td><button class="btn btn-sm btn-default" ng-click="ctrl.seleccionar_escuela(e)"><span class="fa fa-home"></span></button></td>                                
                             </tr>
                         </tbody>
                     </table>
@@ -29,66 +29,78 @@
         <div class="panel panel-default">
             <div class="panel-heading">Datos</div>
             <div class="panel-body">
-                <div class="form-horizontal">
 
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Escuela</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.escuela">
+                <!--<div class="form-horizontal">-->
+                    <fieldset ng-disabled="ctrl.modificar">
+                        <div class="form-horizontal">
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Escuela</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.escuela">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Nombre</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.nombre_escuela">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Domicilio</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.domicilio">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Clave</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.clave">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Tipo Periodo</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.tipo_periodo">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Número Período</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.numero_periodo">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Director</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.director">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-2">Control Escolar</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" ng-model="ctrl.escuela.control_escolar">
+                                </div>
+                            </div>  
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Nombre</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.nombre_escuela">
-                        </div>
-                    </div>
+                    </fieldset>
+                <!--</div>-->
 
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Domicilio</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.domicilio">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Clave</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.clave">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Tipo Periodo</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.tipo_periodo">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Número Período</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.numero_periodo">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Director</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.director">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-lg-2">Control Escolar</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" ng-model="ctrl.escuela.control_escolar">
-                        </div>
-                    </div>                   
-
-
-                </div>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default" ng-click="ctrl.editar_escuela()"> <span class="fa fa-edit"></span></button>
+                <button type="button" class="btn btn-primary">Nuevo</button>
+                <button type="button" class="btn btn-success" ng-click="ctrl.update_escuela()">Guardar</button>
+                <button type="button" class="btn btn-danger" ng-click="ctrl.del_escuela()">Borrar</button>
+                <button type="button" class="btn btn-default">Reporte</button>
             </div>
         </div>
     </div>
