@@ -41,7 +41,7 @@ var paths = {
     scripts: 'js/'
 }
 
-var carpeta_servidor = 'C:/xampp/htdocs/control-escolar/';
+var carpeta_servidor = 'C:/wamp64/www/control-escolar/';
 
 // if sass -> switch to sass folder
 if (useSass) {
