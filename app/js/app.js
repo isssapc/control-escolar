@@ -985,6 +985,7 @@
         name: 'Defender Glass',
         description: 'Cotizador',
         year: ((new Date()).getFullYear()),
+        author:'Ramiro Jiménez Zavaleta',
         layout: {
           isFixed: true,
           isCollapsed: false,
