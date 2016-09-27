@@ -173,7 +173,7 @@ gulp.task('scripts:app', function () {
             .on('error', handleError)
             .pipe($.if(useSourceMaps, $.sourcemaps.write()))
             .pipe(gulp.dest(build.scripts))
-            .pipe(gulp.dest('C:/xampp/htdocs/defenderglass/app/js/'))
+            .pipe(gulp.dest('C:/wamp64/www/control-escolar/app/js/'))
             .pipe(reload({
                 stream: true
             }));
@@ -291,7 +291,7 @@ gulp.task('templates:index', ['templates:views'], function () {
     return gulp.src(source.templates.index)
             .pipe($.htmlPrettify(prettifyOpts))
             .pipe(gulp.dest(build.templates.index))
-            .pipe(gulp.dest('C:/xampp/htdocs/defenderglass/'))
+            .pipe(gulp.dest('C:/wamp64/www/control-escolar/app/js/'))
             .pipe(reload({
                 stream: true
             }));
@@ -308,7 +308,7 @@ gulp.task('templates:views', function () {
                 })))
                 //.pipe($.htmlPrettify(prettifyOpts))
                 .pipe(gulp.dest(build.scripts))
-                .pipe(gulp.dest('C:/xampp/htdocs/defenderglass/app/js/'))
+                .pipe(gulp.dest('C:/wamp64/www/control-escolar/app/js/'))
                 .pipe(reload({
                     stream: true
                 }));
