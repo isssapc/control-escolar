@@ -1,10 +1,10 @@
 {
-  "name": "Angle",
+  "name": "Control Escolar",
   "version": "0.0.0",
   "authors": [
-    "@themicon_co"
+    "Ramiro J"
   ],
-  "description": "Angle - Bootstrap Admin App + AngularJS",
+  "description": "Control escolar",
   "main": "index.html",
   "keywords": [
     "bootstrap",
@@ -17,7 +17,11 @@
   "homepage": "http://themicon.co",
   "private": true,
   "ignore": [
-    "**/.*"
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
   ],
   "dependencies": {
     "angular-loading-bar": "0.8.0",
@@ -44,7 +48,8 @@
     "simple-line-icons": "2.2.3",
     "angular-touch": "1.5.0",
     "jquery.browser": "master",
-     "satellizer": "^0.15.4"
+    "satellizer": "^0.15.4",
+    "bootstrap": "^3.3.7"
   },
   "resolutions": {
     "angular": "1.5.0",

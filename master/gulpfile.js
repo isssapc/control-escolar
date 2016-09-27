@@ -1,16 +1,16 @@
-var args = require('yargs').argv,
-        path = require('path'),
+//var args = require('yargs').argv,
+var path = require('path'),
         gulp = require('gulp'),
         $ = require('gulp-load-plugins')(),
-        gulpsync = $.sync(gulp),
-        browserSync = require('browser-sync'),
-        reload = browserSync.reload,
-        PluginError = $.util.PluginError,
-        del = require('del'),
-        karmaServer = require('karma').Server,
-        protractor = $.protractor.protractor,
-        webdriver = $.protractor.webdriver,
-        express = require('express');
+        gulpsync = $.sync(gulp);
+//browserSync = require('browser-sync'),
+//reload = browserSync.reload,
+//PluginError = $.util.PluginError,
+//del = require('del'),
+//karmaServer = require('karma').Server,
+//protractor = $.protractor.protractor,
+//webdriver = $.protractor.webdriver,
+//express = require('express');
 
 // production mode (see build task)
 var isProduction = false;
@@ -20,12 +20,12 @@ var useSourceMaps = false;
 // Switch to sass mode.
 // Example:
 //    gulp --usesass
-var useSass = args.usesass;
+var useSass = false; //args.usesass;
 
 // Angular template cache
 // Example:
 //    gulp --usecache
-var useCache = args.usecache;
+var useCache = true; //args.usecache;
 
 // ignore everything that begins with underscore
 var hidden_files = '**/_*.*';
@@ -40,6 +40,8 @@ var paths = {
     styles: 'less/',
     scripts: 'js/'
 }
+
+var carpeta_servidor = 'C:/wamp64/www/control-escolar/';
 
 // if sass -> switch to sass folder
 if (useSass) {
@@ -133,7 +135,7 @@ var tplCacheOptions = {
         //log(file.path);
         return file.path.split('views')[1];
     }
-  
+
 };
 
 var injectOptions = {
@@ -173,10 +175,10 @@ gulp.task('scripts:app', function () {
             .on('error', handleError)
             .pipe($.if(useSourceMaps, $.sourcemaps.write()))
             .pipe(gulp.dest(build.scripts))
-            .pipe(gulp.dest('C:/wamp64/www/control-escolar/app/js/'))
-            .pipe(reload({
-                stream: true
-            }));
+            .pipe(gulp.dest(carpeta_servidor + 'app/js/'));
+//            .pipe(reload({
+//                stream: true
+//            }));
 });
 
 
@@ -243,10 +245,10 @@ gulp.task('styles:app', function () {
             .on('error', handleError)
             .pipe($.if(isProduction, $.cssnano(cssnanoOpts)))
             .pipe($.if(useSourceMaps, $.sourcemaps.write()))
-            .pipe(gulp.dest(build.styles))
-            .pipe(reload({
-                stream: true
-            }));
+            .pipe(gulp.dest(build.styles));
+//            .pipe(reload({
+//                stream: true
+//            }));
 });
 
 // APP RTL
@@ -263,10 +265,10 @@ gulp.task('styles:app:rtl', function () {
                 path.basename += "-rtl";
                 return path;
             }))
-            .pipe(gulp.dest(build.styles))
-            .pipe(reload({
-                stream: true
-            }));
+            .pipe(gulp.dest(build.styles));
+//            .pipe(reload({
+//                stream: true
+//            }));
 });
 
 // LESS THEMES
@@ -275,10 +277,10 @@ gulp.task('styles:themes', function () {
     return gulp.src(source.styles.themes)
             .pipe(useSass ? $.compass(compassOptsThemes) : $.less())
             .on('error', handleError)
-            .pipe(gulp.dest(build.styles))
-            .pipe(reload({
-                stream: true
-            }));
+            .pipe(gulp.dest(build.styles));
+//            .pipe(reload({
+//                stream: true
+//            }));
 });
 
 // JADE
@@ -291,27 +293,27 @@ gulp.task('templates:index', ['templates:views'], function () {
     return gulp.src(source.templates.index)
             .pipe($.htmlPrettify(prettifyOpts))
             .pipe(gulp.dest(build.templates.index))
-            .pipe(gulp.dest('C:/wamp64/www/control-escolar/app/js/'))
-            .pipe(reload({
-                stream: true
-            }));
+            .pipe(gulp.dest(carpeta_servidor));
+//            .pipe(reload({
+//                stream: true
+//            }));
 });
 
 // JADE
 gulp.task('templates:views', function () {
-    log('Building views.. ' + (useCache ? 'using cache' : ''));   
+    log('Building views.. ' + (useCache ? 'using cache' : ''));
 
-        return gulp.src(source.templates.views)
-                .pipe($.angularTemplatecache(tplCacheOptions))
-                .pipe($.if(isProduction, $.uglify({
-                    preserveComments: 'some'
-                })))
-                //.pipe($.htmlPrettify(prettifyOpts))
-                .pipe(gulp.dest(build.scripts))
-                .pipe(gulp.dest('C:/wamp64/www/control-escolar/app/js/'))
-                .pipe(reload({
-                    stream: true
-                }));
+    return gulp.src(source.templates.views)
+            .pipe($.angularTemplatecache(tplCacheOptions))
+            .pipe($.if(isProduction, $.uglify({
+                preserveComments: 'some'
+            })))
+            //.pipe($.htmlPrettify(prettifyOpts))
+            .pipe(gulp.dest(build.scripts))
+            .pipe(gulp.dest(carpeta_servidor+'app/js/'));
+//            .pipe(reload({
+//                stream: true
+//            }));
 
 });
 
@@ -369,9 +371,9 @@ gulp.task('clean', function (done) {
 
     log('Cleaning: ' + $.util.colors.blue(delconfig));
     // force: clean files outside current directory
-    del(delconfig, {
-        force: true
-    }, done);
+//    del(delconfig, {
+//        force: true
+//    }, done);
 });
 
 //---------------
@@ -426,32 +428,32 @@ gulp.task('assets', [
 
 /// Testing tasks
 
-gulp.task('test:unit', function (done) {
-    startKarmaTests(true, done);
-});
-
-gulp.task('webdriver', webdriver);
-gulp.task('test:e2e', ['webdriver'], function (cb) {
-
-    var testFiles = gulp.src('test/e2e/**/*.js');
-
-    testServer({
-        port: '4444',
-        dir: './app/'
-    }).then(function (server) {
-        testFiles.pipe(protractor({
-            configFile: 'tests/protractor.conf.js',
-        })).on('error', function (err) {
-            // Make sure failed tests cause gulp to exit non-zero
-            throw err;
-        }).on('end', function () {
-            server.close(cb)
-        });
-    });
-
-});
-
-gulp.task('test', ['test:unit', 'test:e2e'])
+//gulp.task('test:unit', function (done) {
+//    startKarmaTests(true, done);
+//});
+//
+//gulp.task('webdriver', webdriver);
+//gulp.task('test:e2e', ['webdriver'], function (cb) {
+//
+//    var testFiles = gulp.src('test/e2e/**/*.js');
+//
+//    testServer({
+//        port: '4444',
+//        dir: './app/'
+//    }).then(function (server) {
+//        testFiles.pipe(protractor({
+//            configFile: 'tests/protractor.conf.js',
+//        })).on('error', function (err) {
+//            // Make sure failed tests cause gulp to exit non-zero
+//            throw err;
+//        }).on('end', function () {
+//            server.close(cb)
+//        });
+//    });
+//
+//});
+//
+//gulp.task('test', ['test:unit', 'test:e2e'])
 
 /////////////////////
 
