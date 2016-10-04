@@ -63,6 +63,17 @@
 //                            }]
 //                    }
                 })
+                .state('app.carreras', {
+                    url: '/carreras',
+                    title: 'Carreras',
+                    controller: 'CarrerasCtrl as ctrl',
+                    templateUrl: helper.basepath('carreras.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
                 /*                 .state('app.generales', {
                  url: '/datos_generales',
                  title: 'Datos Generales',

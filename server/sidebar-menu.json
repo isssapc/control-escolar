@@ -117,6 +117,11 @@
                 "text": "Conceptos",
                 "sref": "app.conceptos"
 
+            },
+            {
+                "text": "Carreras",
+                "sref": "app.carreras"
+
             }
         ]
 
