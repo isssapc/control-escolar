@@ -52,6 +52,17 @@
 //                            }]
 //                    }
                 })
+                .state('app.conceptos', {
+                    url: '/conceptos',
+                    title: 'Conceptos',
+                    controller: 'ConceptosCtrl as ctrl',
+                    templateUrl: helper.basepath('conceptos.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
                 /*                 .state('app.generales', {
                  url: '/datos_generales',
                  title: 'Datos Generales',

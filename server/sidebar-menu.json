@@ -112,6 +112,11 @@
                 "text": "Escuelas",
                 "sref": "app.escuelas"
 
+            },
+            {
+                "text": "Conceptos",
+                "sref": "app.conceptos"
+
             }
         ]
 
