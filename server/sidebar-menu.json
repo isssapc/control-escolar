@@ -122,6 +122,16 @@
                 "text": "Carreras",
                 "sref": "app.carreras"
 
+            },
+            {
+                "text": "Planes",
+                "sref": "app.planes"
+
+            },
+            {
+                "text": "Grupos",
+                "sref": "app.grupos"
+
             }
         ]
 

@@ -74,6 +74,28 @@
 //                            }]
 //                    }
                 })
+                .state('app.planes', {
+                    url: '/planes',
+                    title: 'Planes',
+                    controller: 'PlanesCtrl as ctrl',
+                    templateUrl: helper.basepath('planes.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
+                .state('app.grupos', {
+                    url: '/grupos',
+                    title: 'Grupos',
+                    controller: 'GruposCtrl as ctrl',
+                    templateUrl: helper.basepath('grupos.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
                 /*                 .state('app.generales', {
                  url: '/datos_generales',
                  title: 'Datos Generales',
