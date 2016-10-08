@@ -132,6 +132,11 @@
                 "text": "Grupos",
                 "sref": "app.grupos"
 
+            },
+            {
+                "text": "Folios",
+                "sref": "app.folios"
+
             }
         ]
 

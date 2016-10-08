@@ -96,6 +96,17 @@
 //                            }]
 //                    }
                 })
+                .state('app.folios', {
+                    url: '/folios',
+                    title: 'Folios',
+                    controller: 'FoliosCtrl as ctrl',
+                    templateUrl: helper.basepath('folios.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
                 /*                 .state('app.generales', {
                  url: '/datos_generales',
                  title: 'Datos Generales',
