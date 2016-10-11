@@ -19,32 +19,63 @@
         self.modificar = true;
 
         self.editar_escuela = function () {
-
             self.modificar = !self.modificar;
+            //desahabilitar los otros botones
+            self.nuevo_disabled = true;
+            self.reporte_disabled = true;
+        };
+
+        self.deshacer_escuela = function () {
+            self.modificar = true;
+            //habilitar los otros botones
+            self.nuevo_disabled = false;
+            self.reporte_disabled = false;
+        };
+
+        self.nueva_escuela = function () {
+            self.modificar = false;
+            //habilitar los otros botones
+            self.nuevo_disabled = true;
+            self.reporte_disabled = true;
+
+            self.escuela = {};
+            self.nuevo = true;
         };
 
         self.update_escuela = function () {
             console.log("update escuela");
-            
-            var id_escuela= self.escuela.escuela;
-            
-            var copia= angular.copy(self.escuela);
-            delete copia.escuela;
-            
-             EscuelaSrv.update_escuela(id_escuela, copia).then(function (response) {
-                console.log("resgistros actualizados: " );
-               
-               var i= self.escuelas.indexOf(self.escuela);
-               
-                self.escuela = response.data;
-                self.escuelas[i]=response.data;
-                
-            }).catch(function (response) {
 
-            });
-            
-            
-            
+            if (!self.nuevo) {
+                var id_escuela = self.escuela.escuela;
+
+                var copia = angular.copy(self.escuela);
+                delete copia.escuela;
+                delete copia.selected;
+
+                EscuelaSrv.update_escuela(id_escuela, copia).then(function (response) {
+                    console.log("resgistros actualizados: ");
+
+                    var i = self.escuelas.indexOf(self.escuela);
+
+                    self.escuela = response.data;
+                    self.escuelas[i] = response.data;
+
+                }).catch(function (response) {
+
+                });
+            } else {
+                EscuelaSrv.add_escuela(self.escuela).then(function (response) {
+                    console.log("nuevo registro añadido");
+                    console.log(response.data);
+                    self.escuela = response.data;
+                    self.escuelas.push(response.data);
+                }).catch(function (response) {
+
+                });
+            }
+
+
+
 
         };
 
@@ -82,6 +113,13 @@
 
         self.seleccionar_escuela = function (e) {
             self.escuela = e;
+
+            angular.forEach(self.escuelas, function (escuela) {
+                escuela.selected = false;
+            });
+
+            e.selected = true;
+
         };
 
 

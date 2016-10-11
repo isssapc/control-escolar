@@ -9,14 +9,14 @@
                             <tr>
                                 <th>Escuela</th>
                                 <th>Nombre</th>
-                                <th></th>
+                                <!--<th></th>-->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="e in ctrl.escuelas">
+                            <tr ng-repeat="e in ctrl.escuelas" ng-click="ctrl.seleccionar_escuela(e)" ng-class="{'bg-primary-dark':e.selected}" >
                                 <td>{{e.escuela}}</td>
                                 <td>{{e.nombre_escuela}}</td>
-                                <td><button class="btn btn-sm btn-default" ng-click="ctrl.seleccionar_escuela(e)"><span class="fa fa-home"></span></button></td>                                
+                                <!--<td><button class="btn btn-sm btn-default" ng-click="ctrl.seleccionar_escuela(e)"><span class="fa fa-home"></span></button></td>-->                                
                             </tr>
                         </tbody>
                     </table>
@@ -100,11 +100,12 @@
 
             </div>
             <div class="panel-footer">
-                <button type="button" class="btn btn-default" ng-click="ctrl.editar_escuela()"> <span class="fa fa-edit"></span></button>
-                <button type="button" class="btn btn-primary">Nuevo</button>
-                <button type="button" class="btn btn-success" ng-click="ctrl.update_escuela()">Guardar</button>
-                <button type="button" class="btn btn-danger" ng-click="ctrl.del_escuela()">Borrar</button>
-                <button type="button" class="btn btn-default">Reporte</button>
+                <button type="button" class="btn btn-warning btn-barra" ng-click="ctrl.editar_escuela()" uib-tooltip="Editar"><span class="fa fa-edit icono-barra"></span></button>
+                <button type="button" class="btn btn-primary btn-barra" ng-disabled="ctrl.nuevo_disabled" ng-click="ctrl.nueva_escuela()" uib-tooltip="Nuevo"><span class="fa fa-file-o icono-barra"></span></button>
+                <button type="button" class="btn btn-success btn-barra" ng-click="ctrl.update_escuela()" uib-tooltip="Grabar"> <span class="fa fa-floppy-o icono-barra"></span></button>
+                <button type="button" class="btn btn-danger btn-barra" ng-click="ctrl.del_escuela()" uib-tooltip="Eliminar"><span class="fa fa-remove icono-barra"></span></button>
+                <button type="button" class="btn btn-default btn-barra" ng-click="ctrl.deshacer_escuela()" uib-tooltip="Deshacer"><span class="fa fa-undo icono-barra"></span></button>
+                <button type="button" class="btn btn-default btn-barra" ng-disabled="ctrl.reporte_disabled" ng-click="ctrl.reporte_escuela()" uib-tooltip="Reporte"><span class="fa fa-print icono-barra"></span></button>
             </div>
         </div>
     </div>
