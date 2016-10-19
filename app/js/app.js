@@ -55,13 +55,13 @@
     'use strict';
 
     angular
-        .module('app.colors', []);
+        .module('app.lazyload', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.lazyload', []);
+        .module('app.logic',['satellizer']);
 })();
 (function() {
     'use strict';
@@ -75,6 +75,18 @@
     'use strict';
 
     angular
+        .module('app.navsearch', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.routes', [
             'app.lazyload'
         ]);
@@ -83,7 +95,7 @@
     'use strict';
 
     angular
-        .module('app.logic',['satellizer']);
+        .module('app.sidebar', []);
 })();
 (function() {
     'use strict';
@@ -95,19 +107,7 @@
     'use strict';
 
     angular
-        .module('app.navsearch', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.translate', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar', []);
 })();
 (function() {
     'use strict';
@@ -251,56 +251,6 @@
     'use strict';
 
     angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.lazyload')
         .config(lazyloadConfig);
 
@@ -334,6 +284,33 @@
           ]
         })
         ;
+
+})();
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .config(logicConfig);
+
+    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
+    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
+
+        //satellizer
+        $authProvider.baseUrl = URL_API;
+        $authProvider.tokenPrefix = TOKEN_PREFIX;
+
+    }
+})();
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .constant('URL_API', "/controlescolar_api/index.php/")
+            .constant("TOKEN_PREFIX", "defendertool");
+
 
 })();
 
@@ -430,6 +407,165 @@
     }
 
 })();
+/**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+
+          var isOpen = navbarForm.hasClass('open');
+
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            // .val('') // Empty input
+            ;
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .constant('APP_COLORS', {
+          'primary':                '#5d9cec',
+          'success':                '#27c24c',
+          'info':                   '#23b7e5',
+          'warning':                '#ff902b',
+          'danger':                 '#f05050',
+          'inverse':                '#131e26',
+          'green':                  '#37bc9b',
+          'pink':                   '#f532e5',
+          'purple':                 '#7266ba',
+          'dark':                   '#3a3f51',
+          'yellow':                 '#fad732',
+          'gray-darker':            '#232735',
+          'gray-dark':              '#3a3f51',
+          'gray':                   '#dde6e9',
+          'gray-light':             '#e4eaec',
+          'gray-lighter':           '#edf1f2'
+        })
+        ;
+})();
+/**=========================================================
+ * Module: colors.js
+ * Services to retrieve global colors
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.colors')
+        .service('Colors', Colors);
+
+    Colors.$inject = ['APP_COLORS'];
+    function Colors(APP_COLORS) {
+        this.byName = byName;
+
+        ////////////////
+
+        function byName(name) {
+          return (APP_COLORS[name] || '#fff');
+        }
+    }
+
+})();
+
 /**=========================================================
  * Module: helpers.js
  * Provides helper functions for routes definition
@@ -612,6 +748,17 @@
 //                            }]
 //                    }
                 })
+                .state('app.folios', {
+                    url: '/folios',
+                    title: 'Folios',
+                    controller: 'FoliosCtrl as ctrl',
+                    templateUrl: helper.basepath('folios.html'),
+//                    resolve: {
+//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
+//                                return UsuarioSrv.get_usuarios();
+//                            }]
+//                    }
+                })
                 /*                 .state('app.generales', {
                  url: '/datos_generales',
                  title: 'Datos Generales',
@@ -698,250 +845,6 @@
 })();
 
 
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .config(logicConfig);
-
-    logicConfig.$inject = ['$authProvider', 'URL_API', 'TOKEN_PREFIX'];
-    function logicConfig($authProvider, URL_API, TOKEN_PREFIX) {
-
-        //satellizer
-        $authProvider.baseUrl = URL_API;
-        $authProvider.tokenPrefix = TOKEN_PREFIX;
-
-    }
-})();
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
-            .constant('URL_API', "/controlescolar_api/index.php/")
-            .constant("TOKEN_PREFIX", "defendertool");
-
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-
-          var isOpen = navbarForm.hasClass('open');
-
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            // .val('') // Empty input
-            ;
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-
-      $translateProvider.preferredLanguage('es');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-    
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       'English',
-          'es_MX':    'Español'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
-    }
-})();
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements
@@ -1303,6 +1206,114 @@
     }
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .config(translateConfig)
+        ;
+    translateConfig.$inject = ['$translateProvider'];
+    function translateConfig($translateProvider){
+
+      $translateProvider.useStaticFilesLoader({
+          prefix : 'app/i18n/',
+          suffix : '.json'
+      });
+
+      $translateProvider.preferredLanguage('es');
+      $translateProvider.useLocalStorage();
+      $translateProvider.usePostCompiling(true);
+      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.translate')
+        .run(translateRun)
+        ;
+    translateRun.$inject = ['$rootScope', '$translate'];
+    
+    function translateRun($rootScope, $translate){
+
+      // Internationalization
+      // ----------------------
+
+      $rootScope.language = {
+        // Handles language dropdown
+        listIsOpen: false,
+        // list of available languages
+        available: {
+          'en':       'English',
+          'es_MX':    'Español'
+        },
+        // display always the current ui language
+        init: function () {
+          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
+          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
+          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
+        },
+        set: function (localeId) {
+          // Set the new idiom
+          $translate.use(localeId);
+          // save a reference for the current language
+          $rootScope.language.selected = $rootScope.language.available[localeId];
+          // finally toggle dropdown
+          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
+        }
+      };
+
+      $rootScope.language.init();
+
+    }
+})();
 (function() {
     'use strict';
 
@@ -2267,74 +2278,6 @@
 
     angular
             .module('app.logic')
-            .controller('AlumnosCtrl', Controller);
-
-    Controller.$inject = ['$log', 'AlumnosSrv'];
-    function Controller($log, AlumnosSrv) {
-        console.log("Controlador Alumnos");
-        var self = this;
-        self.alumnos = [];
-
-        self.get_alumnos = function () {
-            AlumnosSrv.get_alumnos().then(function (response) {
-                self.alumnos = response.data;
-            });
-        };
-
-
-        self.get_alumnos();
-
-
-
-        //        UsuarioSrv.get_usuarios().then(function (response) {
-//            console.log("usuarios", JSON.stringify(response.data));
-//            self.usuarios = response.data;
-//        });
-
-
-
-
-    }
-})();
-
-/**=========================================================
- * Module: browser.js
- * Browser detection
- =========================================================*/
-
-(function () {
-    'use strict';
-    angular
-            .module('app.logic')
-            .service('AlumnosSrv', Alumnos);
-    Alumnos.$inject = ['$http', 'URL_API'];
-    function Alumnos($http, URL_API) {
-        var url = URL_API;
-        return {
-            get_datos_generales: function () {
-                return $http.get(url + 'alumnos_generales');
-            },
-            get_datos_personales: function () {
-                return $http.get(url + 'alumnos_personales');
-            },
-            get_estatus_escolar: function () {
-                return $http.get(url + 'alumnos/estatus_escolar');
-            }
-        };
-    }
-
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function () {
-    'use strict';
-
-    angular
-            .module('app.logic')
             .controller('UsuariosCtrl', Controller);
 
     Controller.$inject = ['$log', 'UsuarioSrv', 'usuarios'];
@@ -2400,32 +2343,63 @@
         self.modificar = true;
 
         self.editar_escuela = function () {
-
             self.modificar = !self.modificar;
+            //desahabilitar los otros botones
+            self.nuevo_disabled = true;
+            self.reporte_disabled = true;
+        };
+
+        self.deshacer_escuela = function () {
+            self.modificar = true;
+            //habilitar los otros botones
+            self.nuevo_disabled = false;
+            self.reporte_disabled = false;
+        };
+
+        self.nueva_escuela = function () {
+            self.modificar = false;
+            //habilitar los otros botones
+            self.nuevo_disabled = true;
+            self.reporte_disabled = true;
+
+            self.escuela = {};
+            self.nuevo = true;
         };
 
         self.update_escuela = function () {
             console.log("update escuela");
-            
-            var id_escuela= self.escuela.escuela;
-            
-            var copia= angular.copy(self.escuela);
-            delete copia.escuela;
-            
-             EscuelaSrv.update_escuela(id_escuela, copia).then(function (response) {
-                console.log("resgistros actualizados: " );
-               
-               var i= self.escuelas.indexOf(self.escuela);
-               
-                self.escuela = response.data;
-                self.escuelas[i]=response.data;
-                
-            }).catch(function (response) {
 
-            });
-            
-            
-            
+            if (!self.nuevo) {
+                var id_escuela = self.escuela.escuela;
+
+                var copia = angular.copy(self.escuela);
+                delete copia.escuela;
+                delete copia.selected;
+
+                EscuelaSrv.update_escuela(id_escuela, copia).then(function (response) {
+                    console.log("resgistros actualizados: ");
+
+                    var i = self.escuelas.indexOf(self.escuela);
+
+                    self.escuela = response.data;
+                    self.escuelas[i] = response.data;
+
+                }).catch(function (response) {
+
+                });
+            } else {
+                EscuelaSrv.add_escuela(self.escuela).then(function (response) {
+                    console.log("nuevo registro añadido");
+                    console.log(response.data);
+                    self.escuela = response.data;
+                    self.escuelas.push(response.data);
+                }).catch(function (response) {
+
+                });
+            }
+
+
+
 
         };
 
@@ -2463,6 +2437,13 @@
 
         self.seleccionar_escuela = function (e) {
             self.escuela = e;
+
+            angular.forEach(self.escuelas, function (escuela) {
+                escuela.selected = false;
+            });
+
+            e.selected = true;
+
         };
 
 
@@ -2492,11 +2473,84 @@
             get_escuelas: function () {
                 return $http.get(url + 'escuelas');
             },
+            
+            add_escuela: function (escuela) {
+                return $http.post(url + 'escuelas/nuevo', {escuela: escuela});
+            },
+            
             del_escuela: function (id_escuela) {
                 return $http.delete(url + 'escuelas/' + id_escuela);
             },
             update_escuela: function (id_escuela, escuela) {
-                return $http.put(url + 'escuelas/'+ id_escuela, {escuela: escuela});
+                return $http.put(url + 'escuelas/' + id_escuela, {escuela: escuela});
+            }
+        };
+    }
+
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function () {
+    'use strict';
+
+    angular
+            .module('app.logic')
+            .controller('AlumnosCtrl', Controller);
+
+    Controller.$inject = ['$log', 'AlumnosSrv'];
+    function Controller($log, AlumnosSrv) {
+        console.log("Controlador Alumnos");
+        var self = this;
+        self.alumnos = [];
+
+        self.get_alumnos = function () {
+            AlumnosSrv.get_alumnos().then(function (response) {
+                self.alumnos = response.data;
+            });
+        };
+
+
+        self.get_alumnos();
+
+
+
+        //        UsuarioSrv.get_usuarios().then(function (response) {
+//            console.log("usuarios", JSON.stringify(response.data));
+//            self.usuarios = response.data;
+//        });
+
+
+
+
+    }
+})();
+
+/**=========================================================
+ * Module: browser.js
+ * Browser detection
+ =========================================================*/
+
+(function () {
+    'use strict';
+    angular
+            .module('app.logic')
+            .service('AlumnosSrv', Alumnos);
+    Alumnos.$inject = ['$http', 'URL_API'];
+    function Alumnos($http, URL_API) {
+        var url = URL_API;
+        return {
+            get_datos_generales: function () {
+                return $http.get(url + 'alumnos_generales');
+            },
+            get_datos_personales: function () {
+                return $http.get(url + 'alumnos_personales');
+            },
+            get_estatus_escolar: function () {
+                return $http.get(url + 'alumnos/estatus_escolar');
             }
         };
     }
