@@ -122,12 +122,15 @@
                     url: '/datos_generales',
                     title: 'Datos Generales',
                     controller: 'DatosGeneralesCtrl as ctrl',
-                    templateUrl: helper.basepath('alumnos/expediente/datos_generales.html')
-//                    resolve: {
-//                        usuarios: ['UsuarioSrv', function (UsuarioSrv) {
-//                                return UsuarioSrv.get_usuarios();
-//                            }]
-//                    }
+                    templateUrl: helper.basepath('alumnos/expediente/datos_generales.html'),
+                    resolve: {
+                        datos_generales: ['AlumnosSrv', function (AlumnosSrv) {
+                                return AlumnosSrv.get_datos_generales();
+                            }],
+                         escuelas: ['EscuelaSrv', function (EscuelaSrv) {
+                                return EscuelaSrv.get_escuelas();
+                            }]
+                    }
                 })
                 .state('app.datos_personales', {
                     url: '/datos_personales',

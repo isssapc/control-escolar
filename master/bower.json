@@ -49,7 +49,8 @@
     "angular-touch": "1.5.0",
     "jquery.browser": "master",
     "satellizer": "^0.15.4",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "angular-smart-table": "^2.1.8"
   },
   "resolutions": {
     "angular": "1.5.0",

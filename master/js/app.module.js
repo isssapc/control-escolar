@@ -27,7 +27,7 @@
             'app.settings',
             'app.utils',
             'app.pages',
-            'app.logic'
+            'app.logic'           
         ]);
 })();
 

@@ -6,7 +6,7 @@
     {
         "text": "Alumnos",
         "sref": "#",
-        "icon": "fa fa-file-o",
+        "icon": "fa fa-plus-square",
         "submenu": [
             
             {
@@ -106,7 +106,7 @@
     {
         "text": "Catálogos",
         "sref": "#",
-        "icon": "icon-folder",
+        "icon": "fa fa-plus-square",
         "submenu": [
             {
                 "text": "Escuelas",

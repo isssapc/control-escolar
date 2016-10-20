@@ -1,42 +1,153 @@
-<h3>Datos_generales</h3>
+<h3>Datos Generales</h3>
 <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-5">
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
+                <div class="form-group">
+                    <select class="form-control" ng-model="ctrl.escuela_sel" ng-options="escuela.escuela as escuela.nombre_escuela for escuela in ctrl.escuelas">
+                        <option value="">Selecciona escuela...</option>
+                    </select>
+
+                    <!--<div>{{ctrl.escuela_sel|json}}</div>-->
+                </div>
+                <div class="form-group">
+                     <div class="col-sm-4">
+                        <select class="form-control" ng-model="ctrl.filtro_estatus">
+                            <option value="">Estatus...</option>
+                            <option value="A">Activo</option>
+                            <option value="B">Baja</option>
+                            <option value="E">Egresado</option>
+                            <option value="D">DGETI</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" placeholder="buscar alumno" class="form-control" ng-model="ctrl.filtro_nombre">
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <!--                    <select class="form-control" ng-model="ctrl.escuela_sel" ng-options="escuela.escuela as escuela.nombre_escuela for escuela in ctrl.escuelas">
+                                            <option value="">Selecciona escuela...</option>
+                                        </select>
+                                        <div>{{ctrl.escuela_sel|json}}</div>-->
+                </div>
+                <div class="table-responsive" style="max-height:300px;">
+                    <table class="table">
                         <thead>
                             <tr>
-                                <th>Escuela</th>
+
                                 <th>Curp</th>
-                                <th>Nombre</th>
-                                <th>Número de Control</th>
-                                <th>Sexo</th>
-                                <th>Fecha de Nacimiento</th>
-                                <th>Tipo de Sangre</th>
-                                <th>Enfermedades</th>
-                                <th>Escuela Definitiva</th>
-                                <th>Estatus</th>
-                             </tr>
+                                <th>Nombre</th>                                
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="x in ctrl.datos_generales">
-                                <td>{{x.escuela}}</td>
+                            <tr ng-repeat="x in ctrl.datos_generales| filter:{escuela:ctrl.escuela_sel, nombre:ctrl.filtro_nombre,estatus:ctrl.filtro_estatus}" ng-click="ctrl.seleccionar_alumno(x)" ng-class="{'bg-primary-dark':x.selected}">
+
                                 <td>{{x.curp}}</td>
-                                <td>{{x.nombre}}</td>
-                                <td>{{x.num_control}}</td>
-                                <td>{{x.sexo}}</td>
-                                <td>{{x.fecha_nac}}</td>
-                                <td>{{x.tipo_sangre}}</td>
-                                <td>{{x.enfermedad}}</td>
-                                <td>{{x.escuela_def}}</td>
-                                <td>{{x.estatus}}</td>
+                                <td>{{x.nombre}}</td>                                
                             </tr>
-                        </tbody>
+                        </tbody>                   
                     </table>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="col-lg-7">
+
+        <div class="panel panel-default" >
+            <div class="panel-heading">Información del Alumno</div>
+            <div class="panel-body">
+
+                <uib-tabset active="active">
+                    <uib-tab index="0" heading="Generales">
+                        <fieldset ng-disabled="ctrl.modificar">
+                            <div class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Curp</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.curp">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Nombre</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.nombre">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Sexo</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.sexo">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Fecha Nacimiento</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.fecha_nac">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Núm. Control</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.num_control">
+                                    </div>                                
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Tipo Sangre</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.tipo_sangre">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Enfermedad</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.enfermedad">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Escuela Def.</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control" ng-model="ctrl.alumno_sel.escuela_def">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </uib-tab>
+                    <uib-tab index=" 1" heading="Personales" >
+                        Contenido datos Personales
+                    </uib-tab>
+                    <uib-tab index="2" >
+                        <uib-tab-heading>
+                            <i class="fa fa-ok"></i> Estatus Escolar
+                        </uib-tab-heading>
+                        Contenido estatus escolar
+                    </uib-tab>
+                    <uib-tab index="3" heading="Expediente" >
+                        Contenido documento
+                    </uib-tab>
+                    <uib-tab index="4" heading="Cuotas" >
+                        Contenido cuotas
+                    </uib-tab>
+                </uib-tabset>
+
+            </div>
+
+        </div>
+
     </div>
 </div>

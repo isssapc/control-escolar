@@ -10,27 +10,38 @@
             .module('app.logic')
             .controller('DatosGeneralesCtrl', Controller);
 
-    Controller.$inject = ['$log', 'AlumnosSrv'];
-    function Controller($log, AlumnosSrv) {
+    Controller.$inject = ['$log', 'AlumnosSrv', 'datos_generales', 'escuelas'];
+    function Controller($log, AlumnosSrv, datos_generales, escuelas) {
         console.log("Controlador Alumnos");
         var self = this;
-        self.datos_generales = [];
+        self.datos_generales = datos_generales.data;
 
-        self.get_datos_generales = function () {
-            AlumnosSrv.get_datos_generales().then(function (response) {
-                self.datos_generales = response.data;
+        self.escuelas = escuelas.data;
+        self.escuela_sel = self.escuelas[0].escuela;
+        self.alumno_sel={};
+        
+        
+        self.seleccionar_alumno=function(a){
+          self.alumno_sel=a;
+          
+           angular.forEach(self.datos_generales, function (alumno) {
+                alumno.selected = false;
             });
+          
+          a.selected=true;
         };
 
 
-        self.get_datos_generales();
+//        self.get_datos_generales = function () {
+//            AlumnosSrv.get_datos_generales().then(function (response) {
+//                self.datos_generales = response.data;
+//            });
+//        };
+//
+//
+//        self.get_datos_generales();
 
 
-
-        //        UsuarioSrv.get_usuarios().then(function (response) {
-//            console.log("usuarios", JSON.stringify(response.data));
-//            self.usuarios = response.data;
-//        });
 
 
 
